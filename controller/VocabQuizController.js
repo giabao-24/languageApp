@@ -16,5 +16,17 @@ const createVocabQuiz = async (req,res) => {
      res.status(500).json({message:'Lỗi khi tạo!',error: error.message});
   }
 }
-
-module.exports = {createVocabQuiz};
+//desc:Chỉ lấy danh sách các bộ từ vựng(hiển thị cho bảng admin,user).Không
+//lấy hết dữ liệu để tối ưu
+const getAllVocabQuizzes = async (req,res) => {
+  try {
+    const result = await VocabQuiz.find().select('-words');
+    if(result.length === 0) {
+      return res.status(404).json({message:'Không có dữ liệu!'});
+    }
+    res.status(200).json({message:'Hoàn tất!',result});
+  }catch(error) {
+    res.status(500).json({message:'Lỗi hệ thống khi lấy dữ liệu!',error: error.message});
+  }
+}
+module.exports = {createVocabQuiz,getAllVocabQuizzes};
