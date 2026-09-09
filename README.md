@@ -17,7 +17,6 @@ ResultTest:
 | -------------- | ---------------------- | ---------------------------- | ---- |
 | GET            | api/getResult/:id      | Lấy kết quả bài thi      | user |
 | GET            | api/getAllResultOfUser | Lấy tất cả bài đã làm | user |
-|                |                        |                              |      |
 
 Test:
 
