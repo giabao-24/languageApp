@@ -133,4 +133,20 @@ const submitTest = async (req, res) => {
     res.status(500).json({ message: 'Error submitting test', error: error.message });
   }
 };
-module.exports = { createTest, getTest, getAllTests, submitTest };
+
+const deleteTest = async (req, res) => {
+  const testId = req.params.id;
+  
+  try {
+    const deletedTest = await Test.findByIdAndDelete(testId);
+    
+    if (!deletedTest) {
+      return res.status(404).json({ message: 'Không tìm thấy đề thi để xóa' });
+    }
+    return res.status(200).json({ message: 'Xóa đề thi thành công' });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi hệ thống khi xóa đề', error: error.message });
+  }
+}
+
+module.exports = { createTest, getTest, getAllTests, submitTest ,deleteTest};

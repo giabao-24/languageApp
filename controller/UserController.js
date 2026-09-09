@@ -74,6 +74,15 @@ const getUserInformation = async (req,res) => {
   }
 }
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 const deleteAccount = async (req,res) => {
   const userId = req.user.id;
   try {
@@ -90,7 +99,7 @@ const deleteAccount = async (req,res) => {
 const deleteUserByAdmin = async(req,res) => {
   const {userId} = req.body;
   try {
-    const user = await User.findByIdAndDelete({userId});
+    const user = await User.findByIdAndDelete(userId);
     if(!user) {
       return res.status(404).json({message: 'User not found'});
     }
@@ -131,11 +140,49 @@ const updateUserInformation = async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi cập nhật thông tin', error: error.message });
   }
 }
+
+const updateUserInformationByAdmin = async (req, res) => {
+  const userId = req.params.id;
+  const { username, password, role } = req.body;
+  
+  try {
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+    }
+
+    if (username) user.username = username;
+    if (role) user.role = role;
+    
+    if (password) {
+      const bcrypt = require('bcrypt'); 
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+
+    res.status(200).json({ 
+      message: 'Cập nhật thông tin người dùng thành công',
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Lỗi server', error: error.message });
+  }
+}
 module.exports = {
   registerUser,
   loginUser,
   getUserInformation,
   deleteAccount,
   deleteUserByAdmin,
-  updateUserInformation
+  updateUserInformation,
+  getAllUsers,
+  updateUserInformationByAdmin
 };
