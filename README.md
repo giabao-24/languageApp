@@ -11,6 +11,14 @@ Dự án cung cấp Backend API cho nền tảng thi thử tiếng Anh (VSTEP, I
 
 ###### 2.Danh sách APIs
 
+| Phương thức | Đường dẫn             | Mô tả                                                                                                                                                                                                                                                                        | Role  |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| POST           | api/submitVocabQuiz       | Thực hiện nộp chấm bài và lưu kết quả                                                                                                                                                                                                                                 | user  |
+| GET            | api/myVocabResult         | Lấy kết quả bài thi và hiển thị như là lịch sử bài làm hiển thị lên dashboard của user                                                                                                                                                                        | user  |
+| GET            | api/getVocabResult/:id    | `Hiển thị trang "Xem lại chi tiết" sau khi vừa nộp bài xong hoặc khi người dùng bấm vào xem lại từ lịch sử.`                                                                                                                                                | user  |
+| GET            | api/getAllVocabResult     | Cung cấp dữ liệu tổng tổng quan cho Admin Dashboard để thống kê lượng người học, phổ điểm, hoặc bộ từ vựng nào đang hot nhất.                                                                                                                          | admin |
+| DELETE         | api/deleteVocabResult/:id | Cho phép Admin dọn dẹp dữ liệu rác. Đặc biệt quan trọng khi Admin xóa một bộ`VocabQuiz`, bạn sẽ cần tự động gọi lệnh xóa toàn bộ các `VocabResult` liên quan đến ID bộ từ vựng đó để tránh lỗi văng app do dữ liệu bị đứt gãy. | admin |
+
 VocabQuiz:
 
 | Phương thức | Đường dẫn           | Mô tả                                                                                                                     | Role  |
