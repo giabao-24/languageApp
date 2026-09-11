@@ -1,0 +1,77 @@
+DANH SÁCH CÁC THỰC THỂ (MODELS), THUỘC TÍNH VÀ MỐI QUAN HỆ TRONG HỆ THỐNG
+
+=========================================
+1. THỰC THỂ: USER (Người dùng)
+=========================================
+* THUỘC TÍNH:
+  - _id            : ObjectId (Khóa chính)
+  - fullName       : String (Họ và tên người dùng)
+  - username       : String (Tên hiển thị/biệt danh)
+  - email          : String (Email đăng nhập, unique)
+  - password       : String (Mật khẩu đã mã hóa bcrypt)
+  - role           : String (Mặc định 'user', có thể là 'admin')
+  - createdAt      : Date (Ngày tạo tài khoản)
+
+* MỐI QUAN HỆ:
+  - (1 - N) với [Result]      : Một User có thể làm nhiều đề thi (Test).
+  - (1 - N) với [VocabResult] : Một User có thể làm nhiều bài tập từ vựng (VocabQuiz).
+
+=========================================
+2. THỰC THỂ: TEST (Đề thi chứng chỉ)
+=========================================
+* THUỘC TÍNH:
+  - _id            : ObjectId (Khóa chính)
+  - testName       : String (Tên đề thi, VD: HSK 4 Đề 1)
+  - typeOfTest     : String (Loại đề: HSK, VSTEP...)
+  - content        : Array/Object JSON (Chứa nội dung cấu trúc đề: reading, listening, danh sách câu hỏi, đáp án...)
+  - createdAt      : Date (Ngày tạo đề)
+
+* MỐI QUAN HỆ:
+  - (1 - N) với [Result]      : Một đề thi có thể được làm bởi nhiều học viên.
+  - KHÔNG có quan hệ với [VocabQuiz] hay [VocabResult].
+
+=========================================
+3. THỰC THỂ: RESULT (Kết quả thi chứng chỉ)
+=========================================
+* THUỘC TÍNH:
+  - _id            : ObjectId (Khóa chính)
+  - userId         : ObjectId (Khóa ngoại -> Ref: User)
+  - testId         : ObjectId (Khóa ngoại -> Ref: Test)
+  - status         : String (Trạng thái nộp bài: 'submitted')
+  - answers        : Object (Lưu chi tiết lựa chọn của user cho từng phần, VD: reading, listening)
+  - scores         : Object (Điểm số chi tiết từng kỹ năng, VD: reading: 10, listening: 15)
+  - submittedAt    : Date (Thời gian nộp bài thi)
+
+* MỐI QUAN HỆ:
+  - (N - 1) với [User]        : Bản ghi kết quả này thuộc về một User duy nhất.
+  - (N - 1) với [Test]        : Bản ghi kết quả này là của một đề Test duy nhất.
+
+=========================================
+4. THỰC THỂ: VOCAB_QUIZ (Bộ từ vựng)
+=========================================
+* THUỘC TÍNH:
+  - _id            : ObjectId (Khóa chính)
+  - topicName      : String (Tên chủ đề từ vựng)
+  - level          : String (Cấp độ: N5, HSK3, B1...)
+  - words          : Array of Objects (Mảng chứa danh sách từ vựng. Mỗi object gồm: từ, nghĩa, ví dụ, lựa chọn trắc nghiệm, đáp án đúng)
+  - createdAt      : Date (Ngày tạo bộ từ)
+
+* MỐI QUAN HỆ:
+  - (1 - N) với [VocabResult] : Một bộ từ vựng có thể được luyện tập và sinh ra nhiều kết quả từ nhiều user.
+  - KHÔNG có quan hệ với [Test] hay [Result].
+
+=========================================
+5. THỰC THỂ: VOCAB_RESULT (Kết quả làm từ vựng)
+=========================================
+* THUỘC TÍNH:
+  - _id            : ObjectId (Khóa chính)
+  - userId         : ObjectId (Khóa ngoại -> Ref: User)
+  - vocabQuizId    : ObjectId (Khóa ngoại -> Ref: VocabQuiz)
+  - score          : Number (Tổng số câu trả lời đúng)
+  - totalQuestions : Number (Tổng số lượng từ vựng trong bài)
+  - answers        : Array of Objects (Lưu chi tiết từng từ: wordId, userAnswer, isCorrect)
+  - createdAt      : Date (Thời gian nộp bài tập từ vựng)
+
+* MỐI QUAN HỆ:
+  - (N - 1) với [User]        : Kết quả bài tập này thuộc về một User duy nhất.
+  - (N - 1) với [VocabQuiz]   : Kết quả này phản ánh điểm số của một bộ từ vựng (VocabQuiz) duy nhất.
