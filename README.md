@@ -11,12 +11,22 @@ Dự án cung cấp Backend API cho nền tảng thi thử tiếng Anh (VSTEP, I
 
 ###### 2.Danh sách APIs
 
+VocabQuiz:
+
+| Phương thức | Đường dẫn           | Mô tả                                                                                                                     | Role  |
+| -------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| GET            | api/getAllVocabQuizzes  | Chỉ cung cấp phần vỏ cho admin và user để hiển thị thông tin của một bộ quiz nhưng không trả về câu hỏi. | user  |
+| GET            | api/getVocabQuiz/:id    | Lấy bộ câu hỏi cụ thể và hiển thị luôn bài làm                                                                  | user  |
+| PUT            | api/updateVocabQuiz/:id | Cập nhật Quiz theo id cụ thể                                                                                            | admin |
+| DELETE         | api/deleteVocabQuiz/:id | Xóa quiz theo id                                                                                                           | admin |
+| POST           | api/submitVocabQuiz     | Nộp bài quiz và chấm điểm                                                                                             | user  |
+
 ResultTest:
 
-| Phương thức | Đường dẫn          | Mô tả                      | Role |
-| -------------- | ---------------------- | ---------------------------- | ---- |
-| GET            | api/getResult/:id      | Lấy kết quả bài thi      | user |
-| GET            | api/getAllResultOfUser | Lấy tất cả bài đã làm | user |
+| Phương thức | Đường dẫn          | Mô tả                         | Role |
+| -------------- | ---------------------- | ------------------------------- | ---- |
+| GET            | api/getResult/:id      | Lấy kết quả bài thi theo id | user |
+| GET            | api/getAllResultOfUser | Lấy tất cả bài đã làm    | user |
 
 Test:
 
